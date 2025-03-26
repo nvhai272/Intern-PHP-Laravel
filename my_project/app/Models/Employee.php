@@ -8,26 +8,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Employee extends Model
 {
     use HasFactory;
-
-    // Đặt tên bảng nếu không theo quy tắc mặc định (Laravel sẽ mặc định là employees)
     protected $table = 'm_employees';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    public $timestamps = true;
+    const CREATED_AT = 'ins_datetime';
+    const UPDATED_AT = 'upd_datetime';
 
-    // Các cột có thể được gán hàng loạt (mass assignable)
-    protected $fillable = [
-        'team_id', 'email', 'first_name', 'last_name', 'password',
-        'gender', 'birthday', 'address', 'avatar', 'salary',
-        'position', 'status', 'type_of_work', 'ins_id', 'upd_id', 'del_flag'
+    protected $guarded = [
+        'id',
+        'ins_id',
+        'ins_datetime',
     ];
 
     // Để các trường thời gian tự động quản lý
-    protected $dates = ['birthday', 'ins_datetime', 'upd_datetime'];
+    // protected $dates = ['birthday'];  // laravel v<6
 
-    // Tạo quan hệ với bảng `teams`
+    protected $casts = [
+        'birthday' => 'date', // Chuyển đổi birthday thành kiểu Date
+        'ins_datetime' => 'datetime:d-m-Y H:i:s', // Tùy chỉnh định dạng
+        'upd_datetime' => 'datetime',
+    ];
+
+    // Tạo quan hệ với bảng teams
     public function team()
     {
-        return $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class, 'team_id', 'id');
     }
 
-    // Các phương thức hoặc logic khác có thể thêm vào đây
+
 
 }
