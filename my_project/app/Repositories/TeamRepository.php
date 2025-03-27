@@ -3,24 +3,16 @@
 namespace App\Repositories;
 
 use App\Models\Team;
+use App\Repositories\BaseRepository;
 
-class TeamRepository
+class TeamRepository extends BaseRepository
 {
-    protected Team $team;
-
-    public function __construct(Team $team)
+    protected function setModel(): void
     {
-        $this->team = $team;
+        $this->model = new Team();
     }
-
-    public function getAll(): \Illuminate\Database\Eloquent\Collection
+    public function getTableName(): string
     {
-        return $this->team->all();
-    }
-
-    public function findById($id)
-    {
-
-        return $this->team->findOrFail($id) ;
+        return $this->model->getTable();
     }
 }

@@ -12,14 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('m_teams', function (Blueprint $table) {
+        Schema::create('m_teams', static function (Blueprint $table) {
             $table->id();
-
             $table->string('name', 128);
             $table->integer('ins_id');
             $table->integer('upd_id')->nullable();
             $table->enum('del_flag', ['0', '1'])->default('0');
-
             $table->timestamp('ins_datetime')->useCurrent(); // Tạo mặc định khi insert
             $table->timestamp('upd_datetime')->nullable()->useCurrentOnUpdate(); // Cập nhật khi update
 
