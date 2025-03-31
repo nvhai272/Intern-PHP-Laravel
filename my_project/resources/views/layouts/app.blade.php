@@ -11,12 +11,10 @@
 
 @include('layouts.header')
 
-<div class="container mt-4">
+<div class="container" style="padding-top: 70px; padding-bottom: 50px;">
     @yield('content')
 </div>
-
 @include('layouts.footer')
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Scopes\IsNotDeletedScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Employee extends Model
+class Employee extends Authenticatable
 {
     use HasFactory;
     protected $table = 'm_employees';
@@ -30,10 +32,15 @@ class Employee extends Model
         'upd_datetime' => 'datetime',
     ];
 
-    // Tạo quan hệ với bảng teams
+    // Tạo quan hệ với bảng team
     public function team()
     {
         return $this->belongsTo(Team::class, 'team_id', 'id');
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new IsNotDeletedScope());
     }
 
 

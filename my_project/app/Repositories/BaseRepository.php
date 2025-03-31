@@ -24,7 +24,7 @@ abstract class BaseRepository implements IRepository
 
     public function getById($id): ?Model
     {
-        return $this->model->findOrFail($id);
+        return $this->model->find($id);
     }
 
     public function getAll(): Collection
@@ -32,21 +32,19 @@ abstract class BaseRepository implements IRepository
         return $this->model->all();
     }
 
-    public function getAllPaging($amount): LengthAwarePaginator
+    public function getAllPagingAndSort($sortBy, $order): LengthAwarePaginator
     {
-        return $this->model->paginate($amount);
+        return $this->model::orderBy($sortBy, $order)->paginate(5);
     }
 
     public function create(array $requestData): ?Model
     {
-        unset($requestData['_token']);
         return $this->model->create($requestData);
     }
 
     public function update($id, array $requestData): bool
     {
         $item = $this->model->findOrFail($id);
-        unset($requestData['_token']);
         return !empty($requestData) ? $item->update($requestData) : false;
     }
 
@@ -55,7 +53,7 @@ abstract class BaseRepository implements IRepository
         return $this->model->findOrFail($id)->delete();
     }
 
-    public function searchPaging($amount, array $requestData, $sort = null, $direction = 'asc')
+    public function searchPagingAndSort($amount, array $requestData, $sort = null, $direction = 'asc')
     {
         $filters = array_filter($requestData, fn($value) => $value !== null && $value !== '');
         $columns = \Schema::getColumnListing($this->model->getTable());

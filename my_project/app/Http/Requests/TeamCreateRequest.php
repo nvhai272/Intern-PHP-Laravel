@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -18,18 +19,29 @@ class TeamCreateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
             "name" => [
-                'required',
-                'max:128',
-                Rule::unique('m_teams', 'name')->where(function ($query) {
-                    return $query->whereNot('del_flag', IS_DELETED);
-                }),
+                'required', 'string', 'max:128',
+                // check trùng tên với các record không bị xóa mềm
+                Rule::unique('m_teams', 'name')
+//                    ->whereNot('del_flag', IS_DELETED)
             ],
         ];
     }
+    public function messages(): array{
+        return [
+            'name.required' => 'Name is required',
+            'name.string' => 'Name must be string',
+            'name.unique' => 'Name already exists',
+        ];
+    }
+
+    // mặc định redirect về trang trước hoặc trang mà bạn muốn nếu fail validation sử dụng thuộc tính dứoi
+    // protected $redirect = '';
+
+
 }

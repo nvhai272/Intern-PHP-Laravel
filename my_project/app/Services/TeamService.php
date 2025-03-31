@@ -17,7 +17,7 @@ class TeamService
     protected TeamRepository $teamRepository;
     private string $table;
 
-//    private const TABLE = 'Team';
+    //private const TABLE = 'Team';
 
     public function __construct(TeamRepository $teamRepository)
     {
@@ -28,72 +28,78 @@ class TeamService
     /**
      * @throws Exception
      */
-    public function getTeamById($id): Model
+    public function getTeamById($id)
     {
         if (!is_numeric($id)) {
-            Log::info(ERROR_ID . " {$this->table} with id {$id}");
+            Log::info(ERROR_ID . " {$this->table} has id {$id}");
             throw new InvalidArgumentException(ERROR_ID);
         }
         try {
             $team = $this->teamRepository->getById($id);
-            if (!$team) {
-                Log::info(ERROR_NOT_FOUND . " {$this->table} with id {$id}");
-                throw new RuntimeException(ERROR_NOT_FOUND);
+            if ($team===null) {
+                Log::error(ERROR_NOT_FOUND . " {$this->table} has id {$id}");
+              return null;
             }
             return $team;
         } catch (QueryException $e) {
             Log::error(ERROR_DATABASE . " {$this->table} : " . $e->getMessage());
-            throw new RuntimeException(ERROR_SYSTEM);
+            throw new RuntimeException(ERROR_NOT_FOUND);
         } catch (Throwable $e) {
-            Log::error(ERROR_READ_FAILED . " {$this->table} with id {$id} : " . $e->getMessage());
+            Log::error(ERROR_READ_FAILED . " {$this->table} has id {$id} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         }
     }
 
-    public function getAllTeam(): Collection
+    public function getAllTeams($sortBy, $order)
     {
         try {
-            $teams = $this->teamRepository->getAll();
-            if ($teams->isEmpty()) {
+//            return $this->teamRepository->getAll();
+            return $this->teamRepository->getAllPagingAndSort($sortBy, $order);
+        } catch (QueryException $e) {
+            Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
+            throw new RuntimeException(ERROR_SYSTEM);
+        } catch (Throwable $e) {
+            Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
+            throw new RuntimeException(ERROR_SYSTEM);
+        }
+    }
 
+    public function getAllTeamWithPagination($amount)
+    {
+        try {
+            return $this->teamRepository->getAllPagingAndSort($amount);
+        } catch (Throwable $e) {
+            Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
+            throw new RuntimeException(ERROR_SYSTEM);
+        }
+    }
+
+    public function createTeam(array $data)
+    {
+        try {
+//            dd($data);
+            $res = $this->teamRepository->create($data);
+            // thành công trả về đối tượng, thất bại ném exeption
+            if ($res) {
+                Log::info(CREATE_SUCCESSED . " {$this->table}", ['data' => $data]);
             }
-            return $teams;
         } catch (QueryException $e) {
-            Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
+            Log::error(ERROR_DATABASE . " {$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         } catch (Throwable $e) {
-            Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
+            Log::error(ERROR_CREATE_FAILED . " {$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         }
     }
 
-    public function getAllTeamWithPagination($amount): LengthAwarePaginator
+    public function updateTeam($id, array $data)
     {
         try {
-            return $this->teamRepository->getAllPaging($amount);
-        } catch (Throwable $e) {
-            Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
-            throw new RuntimeException(ERROR_SYSTEM);
-        }
-    }
-
-    public function createTeam(array $data): Model
-    {
-        try {
-            return $this->teamRepository->create($data);
-        } catch (QueryException $e) {
-            Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
-            throw new RuntimeException(ERROR_SYSTEM);
-        } catch (Throwable $e) {
-            Log::error(ERROR_CREATE_FAILED . "{$this->table} : " . $e->getMessage());
-            throw new RuntimeException(ERROR_SYSTEM);
-        }
-    }
-
-    public function updateTeam($id, array $data): bool
-    {
-        try {
-            return $this->teamRepository->update($id, $data);
+            $res = $this->teamRepository->update($id, $data);
+            if ($res) {
+                Log::info(UPDATE_SUCCESSED . " {$this->table} has id {$id}");
+            }
+            return $res;
         } catch (QueryException $e) {
             Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
@@ -103,10 +109,14 @@ class TeamService
         }
     }
 
-    public function deleteTeam($id): bool
+    public function deleteTeam($id)
     {
         try {
-            return $this->teamRepository->delete($id);
+            $res = $this->teamRepository->delete($id);
+            if ($res) {
+                Log::info(DELETE_SUCCESSED . " {$this->table} has id {$id}");
+            }
+            return $res;
         } catch (QueryException $e) {
             Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
@@ -124,7 +134,7 @@ class TeamService
             Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         } catch (Throwable $e) {
-            Log::error(ERROR_SEARCH_FAILED . "{$this->table} : " . $e->getMessage());
+            Log::error("GI" . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         }
     }

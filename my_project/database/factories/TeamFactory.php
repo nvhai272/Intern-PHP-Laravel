@@ -22,8 +22,6 @@ class TeamFactory extends Factory
     {
         return [
             'name' => $this->faker->company,  // Fake dữ liệu công ty
-            'ins_id' => 1,                    // Giá trị cố định
-            'upd_id' => null,
         ];
     }
 }

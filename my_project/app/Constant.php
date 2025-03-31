@@ -1,17 +1,25 @@
 <?php
 namespace App\Constants;
 
-define('MSG_WELCOME', 'Welcome to Home Page!');
+define('MSG_WELCOME', 'WELCOME TO HOME PAGE!');
 define('IS_DELETED', '1');
-define('DEFAULT', '0');
 define('IS_NOT_DELETED', '0');
 
-// lỗi
-define('ERROR_CREATE_FAILED', 'Unable to create data');
-define('ERROR_READ_FAILED', 'Unable to retrieve data');
-define('ERROR_UPDATE_FAILED', 'Unable to update data');
-define('ERROR_DELETE_FAILED', 'Unable to delete data');
-define('ERROR_NOT_FOUND', 'Data not found');
-define('ERROR_DATABASE', 'Error database');
-define('ERROR_SYSTEM', 'Error system, check again!');
-define('ERROR_ID', 'Invalid id');
+// THÀNH CÔNG
+define('CREATE_SUCCESSED', 'CREATED SUCCESSFULLY');
+define('UPDATE_SUCCESSED', 'UPDATED SUCCESSFULLY');
+define('DELETE_SUCCESSED', 'DELETED SUCCESSFULLY');
+define('LOGIN_SUCCESSED', 'LOGIN SUCCESSFULLY');
+define('LOGOUT', 'User has successfully logged out');
+// LỖI
+define('ERROR_CREATE_FAILED', 'UNABLE TO CREATE DATA');
+define('ERROR_READ_FAILED', 'UNABLE TO RETRIEVE DATA');
+define('ERROR_UPDATE_FAILED', 'UNABLE TO UPDATE DATA');
+define('ERROR_DELETE_FAILED', 'UNABLE TO DELETE DATA');
+define('ERROR_NOT_FOUND', 'DATA NOT FOUND');
+define('ERROR_DATABASE', 'ERROR DATABASE');
+define('ERROR_SYSTEM', 'ERROR SYSTEM, CHECK AGAIN');
+define('ERROR_ID', 'INVALID ID');
+define('ERR_VALIDATION', 'ERROR VALIDATION');
+define('ERR_NOT_LOGIN', 'Account not logged in - Access denied');
+define('ERR_LOGIN', 'LOGIN FAILED');

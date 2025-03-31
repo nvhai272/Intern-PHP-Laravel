@@ -23,7 +23,7 @@ return new class extends Migration
 
         });
 
-        DB::statement('ALTER TABLE m_teams AUTO_INCREMENT = 1');
+//        DB::statement('ALTER TABLE m_teams AUTO_INCREMENT = 1');
         // DB::statement('ALTER TABLE m_teams ADD CONSTRAINT check_id_max CHECK (id <= 99999999999)');
     }
 

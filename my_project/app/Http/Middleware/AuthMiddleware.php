@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthMiddleware
@@ -11,10 +12,16 @@ class AuthMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!Auth::check() && !Auth::hasUser()) {
+            return redirect()->route('login.form')->with("err", ERR_NOT_LOGIN);
+//            return response()->view('layouts.login', ['error' => ]);
+//            return response()->view('layouts.login')->withErrors(ERR_NOT_LOGIN);
+
+        }
         return $next($request);
     }
 }
