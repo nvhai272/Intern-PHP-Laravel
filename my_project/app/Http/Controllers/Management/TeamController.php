@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Management;
 
 use App\Http\Controllers\Controller;
-use App\Models\Team;
 use App\Services\TeamService;
 use App\Http\Requests\TeamCreateRequest;
 use App\Http\Requests\TeamUpdateRequest;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use RuntimeException;
 use Throwable;
 
 class TeamController extends Controller
@@ -31,8 +33,6 @@ class TeamController extends Controller
     {
         $sortBy = request()->get('sort_by', 'id');
         $order = request()->get('order', 'desc');
-
-        // lấy từ request -> thằng này từ đâu? -> laasy từ URL
 
         $teams = $this->teamService->getAllTeams($sortBy, $order)
             // không cần
@@ -128,12 +128,47 @@ class TeamController extends Controller
     public function delete($id)
     {
         try {
-            $this->teamService->deleteTeam($id);
-            return redirect('/management/team/list')->with('msg', DELETE_SUCCESSED);
-        } catch (Throwable $e) {
-            return redirect('/management/team/list')->with('msg', $e->getMessage());
+           $this->teamService->deleteTeam($id);
+            return redirect()->route('team.list')->with('msg', DELETE_SUCCESSED);
+        } catch (\Exception $e) {
+//
+            return view('layouts.err', ['msgErr' => $e->getMessage()]);
         }
     }
+
+
+    public function search(Request $request)
+    {
+        $data = $request->only(['name']);
+        $sortBy = $request->input('sort_by', 'id');
+        $order = $request->input('order', 'desc');
+
+        if ($request->input('search') && !$request->filled('name')) {
+            return redirect()->route('team.search')
+//                ->withErrors(['msgErr' => ERR_INPUT_SEARCH])
+                ->with(['msgErr' => ERR_INPUT_SEARCH])
+                ->withInput();
+        }
+
+        try {
+            $teams = $this->teamService->searchTeam($data, $sortBy, $order);
+        } catch (RuntimeException $e) {
+            Log::error('Error during team search: ' . $e->getMessage());
+//            $teams = $this->teamService->getAllTeams($sortBy, $order);
+//            return redirect()->route('team.search')
+//                ->withErrors(['err' => 'An error occurred during the search. Showing all teams.'])
+//                ->withInput();
+        } catch (Exception $e) {
+            // Catch any other exceptions
+            Log::error('Unexpected error during team search: ' . $e->getMessage());
+//            $teams = $this->teamService->getAllTeams($sortBy, $order);
+//            return redirect()->route('team.search')
+//                ->withErrors(['err' => 'An unexpected error occurred. Showing all teams.'])
+//                ->withInput();
+        }
+        return view('team.search', compact('teams', 'sortBy', 'order'));
+    }
+
 }
 
 

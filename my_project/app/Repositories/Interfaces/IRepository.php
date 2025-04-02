@@ -9,5 +9,5 @@ interface IRepository
     public function create(array $requestData);
     public function update($id, array $requestData);
     public function delete($id);
-    public function searchPagingAndSort($amount, array $requestData);
+    public function searchPagingAndSort(array $requestData, $sort, $direction, $perPage);
 }

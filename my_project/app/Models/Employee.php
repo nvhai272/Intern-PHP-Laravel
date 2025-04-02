@@ -2,20 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Scopes\IsNotDeletedScope;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Employee extends Authenticatable
 {
     use HasFactory;
-    protected $table = 'm_employees';
+    protected $table      = 'm_employees';
     protected $primaryKey = 'id';
-    public $incrementing = true;
-    public $timestamps = true;
-    const CREATED_AT = 'ins_datetime';
-    const UPDATED_AT = 'upd_datetime';
+    public $incrementing  = true;
+    public $timestamps    = true;
+    const CREATED_AT      = 'ins_datetime';
+    const UPDATED_AT      = 'upd_datetime';
 
     protected $guarded = [
         'id',
@@ -27,8 +26,8 @@ class Employee extends Authenticatable
     // protected $dates = ['birthday'];  // laravel v<6
 
     protected $casts = [
-        'birthday' => 'date', // Chuyển đổi birthday thành kiểu Date
-        'ins_datetime' => 'datetime:d-m-Y H:i:s', // Tùy chỉnh định dạng
+        'birthday'     => 'date',
+        'ins_datetime' => 'datetime:d-m-Y H:i:s',
         'upd_datetime' => 'datetime',
     ];
 
@@ -43,6 +42,10 @@ class Employee extends Authenticatable
         static::addGlobalScope(new IsNotDeletedScope());
     }
 
+    // Accesstor and mutator
 
-
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

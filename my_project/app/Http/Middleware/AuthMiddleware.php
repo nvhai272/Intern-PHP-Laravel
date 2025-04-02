@@ -17,7 +17,7 @@ class AuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::check() && !Auth::hasUser()) {
-            return redirect()->route('login.form')->with("err", ERR_NOT_LOGIN);
+            return redirect()->route('login.form')->with("loginErr", ERR_NOT_LOGIN);
 //            return response()->view('layouts.login', ['error' => ]);
 //            return response()->view('layouts.login')->withErrors(ERR_NOT_LOGIN);
 

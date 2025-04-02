@@ -8,6 +8,7 @@ use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\Models\Employee;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -28,16 +29,16 @@ class AuthController extends Controller
         // TH1 -> chỉ check pass -> email check trong FormRequest
         if (!Auth::attempt($request->only(['email', 'password']))) {
 //            \Log::info(ERR_LOGIN . " with email: " . $request->email);
-            \Log::error(ERR_LOGIN . " with email: ", [$request->email]);
+            Log::error(ERR_LOGIN . " with email: ", [$request->email]);
 
             return back()->withErrors([
                 'password' => 'Invalid email or password',
             ])->withInput();
         }
 
-        \Log::info(LOGIN_SUCCESSED . " with email: ", [$request->email]);
+        Log::info(LOGIN_SUCCESSED . " with email: ", [$request->email]);
         session(['accountLogin' => Auth::user()]);
-        return redirect()->route('home')->with('success', LOGIN_SUCCESSED);
+        return redirect()->route('home')->with('msg', LOGIN_SUCCESSED);
 //        return redirect('/')->with('success', 'Login successful');
 
         // TH2 -> check cả pass and mail
@@ -52,7 +53,7 @@ class AuthController extends Controller
 //            ]);
 
             if ($request->user()) {
-                \Log::info(LOGOUT . " with infomation ", [
+                Log::info(LOGOUT . " with information ", [
                     'user_id' => $request->id,
                     'email' => $request->email
                 ]);

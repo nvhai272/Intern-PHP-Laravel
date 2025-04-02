@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\IRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Schema;
 use RuntimeException;
 
 abstract class BaseRepository implements IRepository
@@ -16,6 +17,7 @@ abstract class BaseRepository implements IRepository
     {
         $this->setModel();
         if (!$this->model) {
+            // ghi log o day khi co loi ...
             throw new RuntimeException("Model has not been set in the repository");
         }
     }
@@ -53,24 +55,21 @@ abstract class BaseRepository implements IRepository
         return $this->model->findOrFail($id)->delete();
     }
 
-    public function searchPagingAndSort($amount, array $requestData, $sort = null, $direction = 'asc')
+    public function searchPagingAndSort(array $requestData, $sort = 'id', $direction = 'desc', $perPage = 5)
     {
-        $filters = array_filter($requestData, fn($value) => $value !== null && $value !== '');
-        $columns = \Schema::getColumnListing($this->model->getTable());
+        $filters = array_filter($requestData, static fn($value) => $value !== null && $value !== '');
+        $columns = Schema::getColumnListing($this->model->getTable());
         $query = $this->model->query();
 
         foreach ($filters as $key => $value) {
-            if ($key === 'name' && method_exists($this->model, 'searchName')) {
-                $query->searchName($value);
-            } elseif (in_array($key, $columns)) {
+            if (in_array($key, $columns, true)) {
                 $query->where($key, 'like', '%' . $value . '%');
             }
         }
-
-        if ($sort && in_array($sort, $columns)) {
+        if ($sort && in_array($sort, $columns,true)) {
             $query->orderBy($sort, strtolower($direction));
         }
-
-        return $query->paginate($amount);
+        return $query->paginate($perPage);
     }
+
 }

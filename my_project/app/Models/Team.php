@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class Team extends Model
 {
@@ -25,7 +26,7 @@ class Team extends Model
     // Quan hệ với bảng employees (mối quan hệ 1 - nhiều)
     public function employees()
     {
-        return $this->hasMany(Employee::class, 'team_id', 'id');
+        return $this->hasMany(Employee::class);
     }
 
     // chuyển đổi dữ liệu thành kiểu Carbon -> cần phải format lại hoặc sử dụng accesstor
@@ -45,7 +46,6 @@ class Team extends Model
         parent::boot();
         // dùng hàm này để gán giá trị thời gian tốt hơn là gán trực tiếp trên thuộc tính không ?
         static::creating(static function ($model) {
-
             $model->ins_id = auth()->user()->id ?? 1;
             $model->del_flag = IS_NOT_DELETED;
         });
