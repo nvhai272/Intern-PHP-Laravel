@@ -30,19 +30,19 @@
                 <!-- Employee Management -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle btn text-white border border-primary
-                       {{ request()->routeIs('employee.*') ? 'active' : '' }}"
+                       {{ request()->routeIs('emp.*') ? 'active' : '' }}"
                        id="employeeDropdown" data-bs-toggle="dropdown" role="button">
                         Employee Management
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item {{ request()->routeIs('emp.list') ? 'active' : '' }}" href="{{ route('emp.list') }}">
-                                <i class="bi bi-list"></i> List Admin
+                                <i class="bi bi-list"></i> List Employee
                             </a></li>
                         <li><a class="dropdown-item {{ request()->routeIs('emp.create') ? 'active' : '' }}" href="{{ route('emp.create') }}">
-                                <i class="bi bi-plus-circle text-success"></i> Create Admin
+                                <i class="bi bi-plus-circle text-success"></i> Create Employee
                             </a></li>
                         <li><a class="dropdown-item {{ request()->routeIs('emp.search') ? 'active' : '' }}" href="{{ route('emp.search') }}">
-                                <i class="bi bi-search"></i> Search Admin
+                                <i class="bi bi-search"></i> Search Employee
                             </a></li>
                     </ul>
                 </li>

@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="container d-flex">
+    <div class="container d-flex mt-5">
         <div class="form-container">
             <h3 class="text-left">Team - Create</h3>
             <form action="{{ route('team.add-confirm') }}" method="POST">

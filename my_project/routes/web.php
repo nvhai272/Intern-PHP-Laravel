@@ -16,10 +16,6 @@ Route::post('/management/login', [AuthController::class, 'login'])->name('login'
 Route::post('/management/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Team Management
-
-// middleware có sẵn nhưng đang không hiểu nó ở đâu -> tìm không thấy
-//    Route::middleware(['auth'])->prefix('/management/team')->group(function () {
-
 Route::middleware(['team.middleware'])->prefix('/management/team')->group(function () {
     Route::get('/list', [TeamController::class, 'index'])->name('team.list');
     Route::get('/detail/{id}', [TeamController::class, 'show'])->name('team.detail');

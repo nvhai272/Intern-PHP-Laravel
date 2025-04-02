@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Repositories\TeamRepository;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
@@ -36,9 +34,9 @@ class TeamService
         }
         try {
             $team = $this->teamRepository->getById($id);
-            if ($team===null) {
+            if ($team === null) {
                 Log::error(ERROR_NOT_FOUND . " {$this->table} has id {$id}");
-              return null;
+                return null;
             }
             return $team;
         } catch (QueryException $e) {
@@ -50,7 +48,7 @@ class TeamService
         }
     }
 
-    public function getAllTeams($sortBy, $order)
+    public function getAllTeams($sortBy = 'id', $order = 'desc')
     {
         try {
 //            return $this->teamRepository->getAll();
@@ -58,16 +56,6 @@ class TeamService
         } catch (QueryException $e) {
             Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
-        } catch (Throwable $e) {
-            Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
-            throw new RuntimeException(ERROR_SYSTEM);
-        }
-    }
-
-    public function getAllTeamWithPagination($amount)
-    {
-        try {
-            return $this->teamRepository->getAllPagingAndSort($amount);
         } catch (Throwable $e) {
             Log::error(ERROR_READ_FAILED . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
@@ -126,15 +114,15 @@ class TeamService
         }
     }
 
-    public function searchTeam($amount, array $filters, $sort = null, $direction = 'asc')
+    public function searchTeam($data, $sortBy, $order)
     {
         try {
-            return $this->teamRepository->searchPaging($amount, $filters, $sort, $direction);
+            return $this->teamRepository->searchPagingAndSort($data, $sortBy, $order);
         } catch (QueryException $e) {
             Log::error(ERROR_DATABASE . "{$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         } catch (Throwable $e) {
-            Log::error("GI" . "{$this->table} : " . $e->getMessage());
+            Log::error("Error in {$this->table} : " . $e->getMessage());
             throw new RuntimeException(ERROR_SYSTEM);
         }
     }

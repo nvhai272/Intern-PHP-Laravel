@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="container mt-3">
-        <h2 class="">List Team</h2>
+    <div class="container mt-5">
+        <h2 class="">Team - List</h2>
         @if (session('msg') || session('msgErr'))
             <div id="alertMsg" class="alert
         {{ session('msg') ? 'alert-success' : 'alert-danger' }} fixed-alert">
@@ -20,7 +20,7 @@
             </script>
         @endif
 
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
             <thead>
             <tr>
                 <th>{!! sort_link('id', $sortBy, $order, 'team.list') !!}</th>

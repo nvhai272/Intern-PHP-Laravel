@@ -2,27 +2,29 @@
 
 @section('content')
     <div class="container">
-        @if (session('err'))
-            <div class="alert alert-success" id="show">{{ session('err') }}</div>
-        @endif
-        <script>
-            setTimeout(() => {
-                let alertBox = document.getElementById('show');
-                if (alertBox) {
-                    alertBox.style.display = 'none';
-                }
-            }, 1500);
-        </script>
+
+                @if (session('loginErr'))
+                    <div class="alert alert-success" id="show">{{ session('loginErr') }}</div>
+                @endif
+
+                    <script>
+                    setTimeout(() => {
+                        let alertBox = document.getElementById('show');
+                        if (alertBox) {
+                            alertBox.style.display = 'none';
+                        }
+                    }, 1500);
+                </script>
 
         <h2>Login</h2>
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                @foreach ($errors->all() as $error)
-                    <p>{{ $error }}</p>
-                @endforeach
-            </div>
-        @endif
+        {{--        @if ($errors->any())--}}
+        {{--            <div class="alert alert-danger">--}}
+        {{--                @foreach ($errors->all() as $error)--}}
+        {{--                    <p>{{ $error }}</p>--}}
+        {{--                @endforeach--}}
+        {{--            </div>--}}
+        {{--        @endif--}}
 
         <form action="{{ route('login') }}" method="POST">
             @csrf
@@ -35,6 +37,7 @@
                 {{--                    <p class="text-danger">{{ $errors->first('email') }} </p>--}}
                 {{--                @endif--}}
 
+                {{--        withErrors()        --}}
                 @error('email')
                 <div class="text-danger">{{ $message }}</div>
                 @enderror

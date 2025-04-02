@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @if (session('success'))
-        <div id="show" class="alert alert-success text-center">{{ session('success') }}!</div>
+    @if (session('msg'))
+        <div id="show" class="alert alert-success text-center">{{ session('msg') }}!</div>
     @endif
 
     @if (session('accountLogin'))
