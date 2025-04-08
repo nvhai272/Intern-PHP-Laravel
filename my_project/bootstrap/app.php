@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\TimeoutMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,15 +16,20 @@ return Application::configure(basePath: dirname(__DIR__))
     // xử lí trước khi gọi request router
     ->withMiddleware(function (Middleware $middleware) {
         // danh sách khai báo - đăng kí các middleware toàn cục cho toàn bộ router trong hệ thống của bạn
-//        $middleware->use([
-//            \App\Http\Middleware\AuthMiddleware::class,
-//            // các middleware khác
-//        ]);
+       $middleware->use([
+           TimeoutMiddleware::class
+       ]);
 
         // tạo nhóm middleware
         $middleware->group('team.middleware', [
             AuthMiddleware::class,
-            // Thêm middleware khác nếu cần
+            // TimeoutMiddleware::class
+        ]);
+
+        $middleware->group('emp.middleware', [
+            AuthMiddleware::class,
+            // TimeoutMiddleware::class
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

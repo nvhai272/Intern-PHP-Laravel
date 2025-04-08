@@ -36,6 +36,10 @@ abstract class BaseRepository implements IRepository
 
     public function getAllPagingAndSort($sortBy, $order): LengthAwarePaginator
     {
+        if ($sortBy === 'full_name') {
+            return $this->model::sortByFullName($order)->paginate(5);
+        }
+
         return $this->model::orderBy($sortBy, $order)->paginate(5);
     }
 
@@ -55,21 +59,53 @@ abstract class BaseRepository implements IRepository
         return $this->model->findOrFail($id)->delete();
     }
 
+
+    // search ...
     public function searchPagingAndSort(array $requestData, $sort = 'id', $direction = 'desc', $perPage = 5)
     {
-        $filters = array_filter($requestData, static fn($value) => $value !== null && $value !== '');
-        $columns = Schema::getColumnListing($this->model->getTable());
         $query = $this->model->query();
 
-        foreach ($filters as $key => $value) {
-            if (in_array($key, $columns, true)) {
-                $query->where($key, 'like', '%' . $value . '%');
-            }
-        }
-        if ($sort && in_array($sort, $columns,true)) {
-            $query->orderBy($sort, strtolower($direction));
-        }
+        // Tìm kiếm
+        $query = $this->search($requestData, $query);
+
+        // Sắp xếp
+        $query = $this->sort($query, $sort, $direction);
+
+        // Phân trang
+        return $this->paginate($query, $perPage);
+    }
+
+
+    public function paginate($query, $perPage = 5)
+    {
         return $query->paginate($perPage);
     }
 
+    public function sort($query, $sort = 'id', $direction = 'desc')
+    {
+        $columns = Schema::getColumnListing($this->model->getTable());
+
+        if ($sort && in_array($sort, $columns, true)) {
+            $query->orderBy($sort, strtolower($direction));
+        }
+
+        return $query;
+    }
+
+    public function search(array $requestData, $query)
+    {
+        if (!empty($requestData['full_name'])) {
+            // Tìm kiếm theo full_name (ghép first_name + last_name)
+            $query->searchFullName($requestData['full_name']);
+        }
+
+        // thêm query theo số lượng trường được tìm kiếm
+        foreach ($requestData as $key => $value) {
+            if ($value !== null && $value !== '' && $key !== 'full_name') {
+                $query->where($key, 'like', '%' . $value . '%');
+            }
+        }
+
+        return $query;
+    }
 }

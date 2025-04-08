@@ -9,6 +9,7 @@ use App\Http\Requests\TeamUpdateRequest;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Throw_;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use RuntimeException;
@@ -23,28 +24,20 @@ class TeamController extends Controller
         $this->teamService = $teamService;
     }
 
-    // show all
-
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     public function index()
     {
+        sleep(6);
         $sortBy = request()->get('sort_by', 'id');
         $order = request()->get('order', 'desc');
 
         $teams = $this->teamService->getAllTeams($sortBy, $order)
-            // không cần
-//            ->appends([
-//            'sort_by' => $sortBy,
-//            'order' => $order
-//        ])
-        ;
+            ->appends([
+                'sort_by' => $sortBy,
+                'order' => $order
+            ]);
         return view('team.index', compact('teams', 'sortBy', 'order'));
     }
 
-    // show detail
     public function show($id)
     {
         try {
@@ -60,14 +53,12 @@ class TeamController extends Controller
         }
     }
 
-    // create form
     public function showCreateForm()
     {
         $validatedData = session('dataCreateTeam', []);
         return view('team.create', compact('validatedData'));
     }
 
-    // show confirm
     public function confirmCreate(TeamCreateRequest $request)
     {
         $validated = $request->validated();
@@ -75,14 +66,13 @@ class TeamController extends Controller
         return view('team.add-confirm', compact('validated'));
     }
 
-    // create
     public function create(Request $request)
     {
         try {
             $this->teamService->createTeam($request->except('_token'));
             session()->forget('dataCreateTeam');
 
-            return redirect('/management/team/list')->with('msg', CREATE_SUCCESSED);
+            return redirect('/management/team/list')->with('msg', CREATE_SUCCEED);
         } catch (Throwable $e) {
             return view('team.create')->with('msgErr', $e->getMessage());
         }
@@ -98,28 +88,26 @@ class TeamController extends Controller
                 return view('layouts.err', ['msgErr' => ERROR_NOT_FOUND]);
             }
             return view('team.edit', compact('team'));
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return redirect("/management/team/list")->with('msgErr', $e->getMessage());
         }
     }
 
-    // show confirm
     public function confirmEdit(TeamUpdateRequest $request)
     {
         $id = $request->input('id');
         $validated = $request->validated();
-//        session(['dataEditTeam' => $validated]);
+        //        session(['dataEditTeam' => $validated]);
         return view('team.edit-confirm', compact('validated', 'id'));
     }
 
-    // create
     public function edit(Request $request)
     {
         try {
             $id = $request->route('id');
             $this->teamService->updateTeam($id, $request->except('_token'));
-//            session()->forget('dataEditTeam');
-            return redirect('/management/team/list')->with('msg', UPDATE_SUCCESSED);
+            //            session()->forget('dataEditTeam');
+            return redirect('/management/team/list')->with('msg', UPDATE_SUCCEED);
         } catch (Throwable $e) {
             return redirect('/management/team/list')->with('msgErr', $e->getMessage());
         }
@@ -128,10 +116,10 @@ class TeamController extends Controller
     public function delete($id)
     {
         try {
-           $this->teamService->deleteTeam($id);
-            return redirect()->route('team.list')->with('msg', DELETE_SUCCESSED);
-        } catch (\Exception $e) {
-//
+            $this->teamService->deleteTeam($id);
+            return redirect()->route('team.list')->with('msg', DELETE_SUCCEED);
+        } catch (Throwable $e) {
+            //
             return view('layouts.err', ['msgErr' => $e->getMessage()]);
         }
     }
@@ -143,32 +131,19 @@ class TeamController extends Controller
         $sortBy = $request->input('sort_by', 'id');
         $order = $request->input('order', 'desc');
 
+        $teams=$this->teamService->getAllTeams($sortBy,$order);
+
         if ($request->input('search') && !$request->filled('name')) {
             return redirect()->route('team.search')
-//                ->withErrors(['msgErr' => ERR_INPUT_SEARCH])
+                //                ->withErrors(['msgErr' => ERR_INPUT_SEARCH])
                 ->with(['msgErr' => ERR_INPUT_SEARCH])
                 ->withInput();
         }
 
-        try {
+        if ($request->input('search') && $request->filled('name')) {
             $teams = $this->teamService->searchTeam($data, $sortBy, $order);
-        } catch (RuntimeException $e) {
-            Log::error('Error during team search: ' . $e->getMessage());
-//            $teams = $this->teamService->getAllTeams($sortBy, $order);
-//            return redirect()->route('team.search')
-//                ->withErrors(['err' => 'An error occurred during the search. Showing all teams.'])
-//                ->withInput();
-        } catch (Exception $e) {
-            // Catch any other exceptions
-            Log::error('Unexpected error during team search: ' . $e->getMessage());
-//            $teams = $this->teamService->getAllTeams($sortBy, $order);
-//            return redirect()->route('team.search')
-//                ->withErrors(['err' => 'An unexpected error occurred. Showing all teams.'])
-//                ->withInput();
         }
+
         return view('team.search', compact('teams', 'sortBy', 'order'));
     }
-
 }
-
-

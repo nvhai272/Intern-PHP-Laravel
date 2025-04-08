@@ -4,13 +4,13 @@
 
 @section('content')
 
-    <div class="container d-flex mt-5">
+    <div class="container d-flex">
         <div class="form-container">
-            <h3 class="text-left">Team - Create</h3>
+            <h2 class="text-left">Team - Create</h2>
             <form action="{{ route('team.add-confirm') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="adminName" class="form-label">Name</label>
+                    <b for="adminName" class="form-label">Name:</b>
                     <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror"
                            placeholder="Enter name"
                            value="{{ old('name', session('dataCreateTeam.name')) }}">

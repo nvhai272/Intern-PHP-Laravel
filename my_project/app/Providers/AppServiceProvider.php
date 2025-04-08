@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Repositories\TeamRepository;
 use App\Services\TeamService;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Employee;
+use App\Observers\EmployeeObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Employee::observe(EmployeeObserver::class);
     }
 }

@@ -9,6 +9,6 @@ class IsNotDeletedScope implements Scope
 {
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where('del_flag', IS_NOT_DELETED); // Tự động chỉ lấy Model có del_flag = 0
+        $builder->where('del_flag', IS_NOT_DELETED);
     }
 }

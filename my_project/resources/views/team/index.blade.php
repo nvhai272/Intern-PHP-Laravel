@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="container mt-5">
+    <div class="container">
         <h2 class="">Team - List</h2>
         @if (session('msg') || session('msgErr'))
             <div id="alertMsg" class="alert
@@ -25,8 +25,8 @@
             <tr>
                 <th>{!! sort_link('id', $sortBy, $order, 'team.list') !!}</th>
                 <th>{!! sort_link('name', $sortBy, $order, 'team.list') !!}</th>
-                <th>Ins_Id</th>
-                <th>Upd_Id</th>
+                {{-- <th>Ins_Id</th>
+                <th>Upd_Id</th> --}}
                 <th>{!! sort_link('ins_datetime', $sortBy, $order, 'team.list') !!}</th>
                 <th>{!! sort_link('upd_datetime', $sortBy, $order, 'team.list') !!}</th>
                 <th>Action</th>
@@ -34,11 +34,11 @@
             </thead>
             <tbody>
             @foreach ($teams as $team)
-                <tr>
+                <tr class="{{ $loop->odd ? 'table-warning' : '' }}">
                     <td>{{ $team->id }}</td>
                     <td>{{ $team->name }}</td>
-                    <td>{{ $team->ins_id }}</td>
-                    <td>{{ $team->upd_id }}</td>
+                    {{-- <td>{{ $team->ins_id }}</td>
+                    <td>{{ $team->upd_id }}</td> --}}
                     <td>{{ $team->ins_datetime }}</td>
                     <td>{{ $team->upd_datetime }}</td>
                     <td>
