@@ -48,8 +48,6 @@
                             alt="Avatar Preview" style="width: 100px; display: block;">
                     </div>
 
-
-
                 </div>
                 <div class="col-md-6">
                     <label for="email" class="form-label font-weight-bold">Email:</label>
@@ -60,7 +58,7 @@
                     @enderror
 
                     <input type="email" id="email" name="email" class="form-control"
-                        value="{{ old('email', $oldData['email'] ?? '') }}">
+                        value="{{ old('email', $oldData['email'] ?? '') }}" placeholder="Enter email">
 
                 </div>
             </div>
@@ -115,7 +113,7 @@
                     <select name="team_id" id="team_id" class="form-select">
                         <option value="">Select here</option>
                         @php
-                            $selectedTeam = old('team_id', $validatedData['team_id'] ?? '');
+                            $selectedTeam = old('team_id', $oldData['team_id'] ?? '');
                         @endphp
 
                         @foreach ($teams as $team)
@@ -140,7 +138,7 @@
                     @enderror
 
                     <input type="text" id="firstname" name="first_name" class="form-control"
-                        value="{{ old('first_name', $oldData['first_name'] ?? '') }}">
+                        value="{{ old('first_name', $oldData['first_name'] ?? '') }}" placeholder="Enter f_name">
 
                 </div>
                 <div class="col-md-6">
@@ -153,7 +151,7 @@
                     @enderror
 
                     <input type="text" id="lastname" name="last_name" class="form-control"
-                        value="{{ old('last_name', $oldData['last_name'] ?? '') }}">
+                        value="{{ old('last_name', $oldData['last_name'] ?? '') }}" placeholder="Enter l_name">
                 </div>
             </div>
 
@@ -249,7 +247,7 @@
                     @enderror
 
                     <input type="number" id="salary" name="salary" class="form-control" step="0.01"
-                        value="{{ old('salary', $oldData['salary'] ?? '') }}">
+                        value="{{ old('salary', $oldData['salary'] ?? '') }}" placeholder="Enter salary">
                 </div>
                 <div class="col-md-6">
                     <label for="password" class="form-label font-weight-bold">Password:</label>
@@ -260,7 +258,7 @@
                         </small>
                     @enderror
 
-                    <input id="password" name="password" class="form-control" type="password">
+                    <input id="password" name="password" class="form-control" type="password" placeholder="Enter password">
                     {{-- {{ old('password', $oldData['password'] ?? '') }} --}}
                     </input>
 

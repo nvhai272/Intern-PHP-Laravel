@@ -20,9 +20,11 @@
         <form action="{{ route('emp.edit-confirm') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <input type="text" id="oldPass" name="current_password" class="form-control" value="{{ $emp['password'] }}" hidden>
+            <input type="text" id="oldPass" name="current_password" class="form-control" value="{{ $emp['password'] }}"
+                hidden>
 
-            <input type="text" id="avatar" name="current_avatar" class="form-control" value="{{ $emp['avatar'] }}" hidden>
+            <input type="text" id="avatar" name="current_avatar" class="form-control" value="{{ $emp['avatar'] }}"
+                hidden>
 
             <input type="text" id="id" name="id" class="form-control" value="{{ $emp['id'] }}" hidden>
 
@@ -51,10 +53,9 @@
                                 : asset('storage/avatars/' . $emp['avatar']);
                         @endphp
 
-                        <img id="avatar-img"
-                            src="
-                            {{ $avatarPath }}"
-                            alt="Avatar Preview" style="width: 100px; display: block;">
+                        <img id="avatar-img" src="
+                            {{ $avatarPath }}" alt="Avatar Preview"
+                            style="width: 100px; display: block;">
                     </div>
 
 
@@ -68,8 +69,10 @@
                         </small>
                     @enderror
 
+
+                    {{-- {{dd($oldData)}} --}}
                     <input type="email" id="email" name="email" class="form-control"
-                        value="{{ old('email', $emp['email'] ?? '') }}">
+                        value="{{ $oldData['email'] ?? ($emp['email'] ?? '') }}">
 
                 </div>
             </div>
@@ -110,9 +113,13 @@
 
                     {{-- {{$emp->getRawOriginal('status')}} --}}
                     <input type="radio" id="status_working" name="status" value="1"
-                        {{ (int) old('status', $emp->getRawOriginal('status') ?? '') === 1 ? 'checked' : '' }}> On working
+                        {{ ((int) ($oldData['status'] ?? ($emp->getRawOriginal('status') ?? ''))) === 1 ? 'checked' : '' }}>
+                    On working
+                    {{-- {{ (int) old('status', $emp->getRawOriginal('status') ?? '') === 1 ? 'checked' : '' }}> On working --}}
                     <input type="radio" id="status_retired" name="status" value="2"
-                        {{ (int) old('status', $emp->getRawOriginal('status') ?? '') === 2 ? 'checked' : '' }}> Retired
+                        {{ ((int) ($oldData['status'] ?? ($emp->getRawOriginal('status') ?? ''))) === 2 ? 'checked' : '' }}>
+                    Retired
+                    {{-- {{ (int) old('status', $emp->getRawOriginal('status') ?? '') === 2 ? 'checked' : '' }}> Retired --}}
                 </div>
                 <div class="col-md-6">
                     <label for="team_id" class="form-label font-weight-bold">Team:</label>
@@ -126,7 +133,7 @@
                     <select name="team_id" id="team_id" class="form-select">
                         <option value="">Select here</option>
                         @php
-                            $selectedTeam = old('team_id', $emp['team_id'] ?? '');
+                            $selectedTeam = $oldData['team_id'] ?? ($emp['team_id'] ?? '');
                         @endphp
 
                         @foreach ($teams as $team)
@@ -151,7 +158,7 @@
                     @enderror
 
                     <input type="text" id="firstname" name="first_name" class="form-control"
-                        value="{{ old('first_name', $emp['first_name'] ?? '') }}">
+                        value="{{ $oldData['first_name'] ?? ($emp['first_name'] ?? '') }}">
 
                 </div>
                 <div class="col-md-6">
@@ -164,7 +171,7 @@
                     @enderror
 
                     <input type="text" id="lastname" name="last_name" class="form-control"
-                        value="{{ old('last_name', $emp['last_name'] ?? '') }}">
+                        value="{{ $oldData['last_name'] ?? ($emp['last_name'] ?? '') }}">
                 </div>
             </div>
 
@@ -179,9 +186,11 @@
                     @enderror
                     <br>
                     <input type="radio" id="gender_male" name="gender" value="1"
-                        {{ (int) old('gender', $emp->getRawOriginal('gender') ?? '') === 1 ? 'checked' : '' }}> Male
+                        {{ (int) ($oldData['gender'] ?? ($emp->getRawOriginal('gender') ?? '')) === 1 ? 'checked' : '' }}>
+                    Male
                     <input type="radio" id="gender_female" name="gender" value="2"
-                        {{ (int) old('gender', $emp->getRawOriginal('gender') ?? '') === 2 ? 'checked' : '' }}> Female
+                        {{ (int) ($oldData['gender'] ?? ($emp->getRawOriginal('gender') ?? '')) === 2 ? 'checked' : '' }}>
+                    Female
 
                 </div>
                 <div class="col-md-6">
@@ -194,7 +203,7 @@
                     @enderror
 
                     <input type="date" id="birthday" name="birthday" class="form-control"
-                        value="{{ old('birthday', $emp->getRawOriginal('birthday') ?? '') }}">
+                        value="{{ $oldData['birthday'] ?? ($emp->getRawOriginal('birthday') ?? '') }}">
                 </div>
             </div>
 
@@ -210,19 +219,19 @@
                     <select name="position" id="position" class="form-select">
                         <option value="">Select here</option>
                         <option value="1"
-                            {{ old('position', $emp->getRawOriginal('position') ?? '') == '1' ? 'selected' : '' }}>
+                            {{ ($oldData['position'] ?? ($emp->getRawOriginal('position') ?? '')) == '1' ? 'selected' : '' }}>
                             Manager</option>
                         <option value="2"
-                            {{ old('position', $emp->getRawOriginal('position') ?? '') == '2' ? 'selected' : '' }}>
+                            {{ ($oldData['position'] ?? ($emp->getRawOriginal('position') ?? '')) == '2' ? 'selected' : '' }}>
                             Leader</option>
                         <option value="3"
-                            {{ old('position', $emp->getRawOriginal('position') ?? '') == '3' ? 'selected' : '' }}>
+                            {{ ($oldData['position'] ?? ($emp->getRawOriginal('position') ?? '')) == '3' ? 'selected' : '' }}>
                             BSE</option>
                         <option value="4"
-                            {{ old('position', $emp->getRawOriginal('position') ?? '') == '4' ? 'selected' : '' }}>
+                            {{ ($oldData['position'] ?? ($emp->getRawOriginal('position') ?? '')) == '4' ? 'selected' : '' }}>
                             Developer</option>
                         <option value="5"
-                            {{ old('position', $emp->getRawOriginal('position') ?? '') == '5' ? 'selected' : '' }}>
+                            {{ ($oldData['position'] ?? ($emp->getRawOriginal('position') ?? '')) == '5' ? 'selected' : '' }}>
                             Tester</option>
                     </select>
 
@@ -239,16 +248,18 @@
                     <select name="type_of_work" id="type_of_work" class="form-select">
                         <option value="">Select here</option>
                         <option value="1"
-                            {{ old('type_of_work', $emp['type_of_work'] ?? '') == '1' ? 'selected' : '' }}>Fulltime
+                            {{ ($oldData['type_of_work'] ?? ($emp['type_of_work'] ?? '')) == '1' ? 'selected' : '' }}>
+                            Fulltime
                         </option>
                         <option value="2"
-                            {{ old('type_of_work', $emp['type_of_work'] ?? '') == '2' ? 'selected' : '' }}>Part time
+                            {{ ($oldData['type_of_work'] ?? ($emp['type_of_work'] ?? '')) == '2' ? 'selected' : '' }}>Part
+                            time
                         </option>
                         <option value="3"
-                            {{ old('type_of_work', $emp['type_of_work'] ?? '') == '3' ? 'selected' : '' }}>Test
+                            {{ ($oldData['type_of_work'] ?? ($emp['type_of_work'] ?? '')) == '3' ? 'selected' : '' }}>Test
                         </option>
                         <option value="4"
-                            {{ old('type_of_work', $emp['type_of_work'] ?? '') == '4' ? 'selected' : '' }}>Intern
+                            {{ ($oldData['type_of_work'] ?? ($emp['type_of_work'] ?? '')) == '4' ? 'selected' : '' }}>Intern
                         </option>
                     </select>
                 </div>
@@ -265,7 +276,7 @@
                     @enderror
 
                     <input type="number" id="salary" name="salary" class="form-control" step="0.01"
-                        value="{{ old('salary', $emp['salary'] ?? '') }}">
+                        value="{{ (int) ($oldData['salary'] ?? ($emp['salary'] ?? '')) }}">
                 </div>
                 <div class="col-md-6">
                     <label for="password" class="form-label font-weight-bold">Password - use old pass if no has new

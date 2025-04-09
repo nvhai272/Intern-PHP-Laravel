@@ -6,6 +6,7 @@ use App\Exports\EmployeeExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeCreateRequest;
 use App\Http\Requests\EmployeeUpdateRequest;
+use App\Models\Employee;
 use App\Models\Team;
 use App\Services\EmployeeService;
 use Exception;
@@ -59,6 +60,7 @@ class EmployeeController extends Controller
         return view(
             'employee.search',
             $data
+
             //     ['teams'=>$data['teams']?? collect(),
             //     'emps'=>$data['emps']?? collect(),
             //     'data'=>$data['data']?? collect(),
@@ -112,9 +114,13 @@ class EmployeeController extends Controller
         if (isset($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         }
+
         unset($validated['avatar_upload']);
+
         session(['dataCreateEmp' => $validated]);
-        return view('employee.add-confirm', compact('validated'));
+
+        $model = new Employee($validated);
+        return view('employee.add-confirm', compact('model'));
     }
 
     public function create(Request $request)
@@ -143,6 +149,8 @@ class EmployeeController extends Controller
                 return view('layouts.err', ['msgErr' => ERROR_NOT_FOUND]);
             }
 
+            // dd($emp);
+
             $oldData = session('dataEditEmp');
             $teams = Team::all();
             return view('employee.edit', compact('teams', 'emp','oldData'));
@@ -160,7 +168,9 @@ class EmployeeController extends Controller
         unset($validated['avatar_upload']);
         // dd($validated);
         session(['dataEditEmp' => $validated]);
-        return view('employee.edit-confirm', compact('validated', 'id'));
+        $model = new Employee($validated);
+        // dd($model);
+        return view('employee.edit-confirm', compact('model', 'id'));
     }
 
     public function edit(Request $request)
@@ -174,14 +184,14 @@ class EmployeeController extends Controller
         }
     }
 
-    // public function delete($id)
-    // {
-    //     try {
-    //         $this->teamService->deleteTeam($id);
-    //         return redirect()->route('team.list')->with('msg', DELETE_SUCCEED);
-    //     } catch (Throwable $e) {
-    //         //
-    //         return view('layouts.err', ['msgErr' => $e->getMessage()]);
-    //     }
-    // }
+    public function delete($id)
+    {
+        try {
+            $this->empService->deleteEmp($id);
+            return redirect()->route('emp.list')->with('msg', DELETE_SUCCEED);
+        } catch (Throwable $e) {
+            //
+            return view('layouts.err', ['msgErr' => $e->getMessage()]);
+        }
+    }
 }

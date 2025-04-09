@@ -90,7 +90,7 @@
                                     <form action="{{ route('emp.delete', $employee->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf
-                                        @method('DELETE')
+                                        {{-- @method('DELETE') --}}
                                         <button type="submit" class="btn btn-sm btn-danger"
                                             onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>

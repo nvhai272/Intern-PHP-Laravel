@@ -6,16 +6,22 @@
 
             <h3 class="text-danger text-center mb-5">Are you sure to create this Employee data?</h3>
 
-            @foreach ($validated as $key => $value)
+            @foreach ($model->toArray() as $key => $value)
                 @if ($key === 'avatar')
                     <label class="form-label"><strong>Avatar:</strong></label>
                     <div>
                         <img src="{{ asset('storage/temp_avatars/' . $value) }}" alt="Avatar"
                             style="width: 120px; height: auto;">
                     </div>
+                @elseif ($key === 'team_id')
+                    <label class="form-label"><strong>Team:</strong></label>
+                    <p>{{$model->team->name}}</p>
                 @elseif ($key === 'password')
                     <label class="form-label"><strong>Password:</strong></label>
                     <p>••••••••</p>
+                @elseif ($key === 'type_of_work')
+                    <label class="form-label"><strong>Type of work:</strong></label>
+                    <p>{{ $model->work }}</p>
                 @else
                     <label class="form-label"><strong>{{ ucfirst($key) }}:</strong></label>
                     <p>{{ $value }}</p>
@@ -26,8 +32,8 @@
         <form action="{{ route('emp.create') }}" method="POST">
             @csrf
 
-            @foreach ($validated as $key => $value)
-                <input class="form-control" type="hidden" name="{{ $key }}" value="{{ $value }}">
+            @foreach ($model->getAttributes() as $key => $value)
+                <input class="form-control" type="hidden" name="{{ $key }}" value="{{ e($value) }}">
             @endforeach
 
 

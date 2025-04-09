@@ -117,16 +117,16 @@ class EmployeeService
             $res = $this->empRepo->create(requestData: $data);
             if ($res) {
                 Storage::move('temp_avatars/' . $data['avatar'], 'avatars/' . $data['avatar']);
-                Log::info(CREATE_SUCCEED . " {$this->table}", ['data' => $data]);
                 session()->forget('dataCreateEmp');
+                session()->forget('temp_avatar');
+
+                Log::info(CREATE_SUCCEED . " {$this->table}", ['data' => $data]);
             }
         } catch (QueryException $e) {
-            dd($e);
             Log::error(message: ERROR_DATABASE . " {$this->table} : " . $e->getMessage());
             throw new Exception(ERROR_SYSTEM);
         } catch (Throwable $e) {
 
-            dd($e);
             Log::error(ERROR_CREATE_FAILED . " {$this->table} : " . $e->getMessage());
             throw new Exception(ERROR_SYSTEM);
         }
@@ -142,11 +142,12 @@ class EmployeeService
                 // dd($data['avatar']);
                 // dd(session('current_avatar'));
 
-
+                // có ảnh mới upload thì xóa ảnh cũ và chuyển từ ảnh mới từ thư mục ảnh tạm sang thư mục chính
                 if (!$data['avatar'] === session('current_avatar')) {
                     Storage::move('temp_avatars/' . $data['avatar'], 'avatars/' . $data['avatar']);
                     Storage::delete('avatars/' . session('current_avatar'));
                 }
+
                 Storage::move('temp_avatars/' . $data['avatar'], 'avatars/' . $data['avatar']);
 
                 session()->forget('dataEditTeam');

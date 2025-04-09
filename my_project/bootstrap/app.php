@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\CheckPreviousUrlToDeleteSession;
 use App\Http\Middleware\TimeoutMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -24,12 +25,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('team.middleware', [
             AuthMiddleware::class,
             // TimeoutMiddleware::class
+
         ]);
 
         $middleware->group('emp.middleware', [
             AuthMiddleware::class,
             // TimeoutMiddleware::class
-
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

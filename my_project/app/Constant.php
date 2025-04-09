@@ -11,6 +11,10 @@ define('DELETE_SUCCEED', 'Deleted successfully');
 define('LOGIN_SUCCEED', 'Login successfully');
 define('LOGOUT', 'User has successfully logged out');
 
+define('MAIL_CREATE_QUEUE', 'Mail queued for employee (created)');
+define('MAIL_UPDATE_QUEUE', 'Mail queued for employee (created)');
+
+
 // ERR
 define('ERROR_CREATE_FAILED', 'Create failed');
 define('ERROR_READ_FAILED', 'Retrieving data failed');

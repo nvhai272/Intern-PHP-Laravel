@@ -24,14 +24,13 @@ class EmployeeUpdateRequest extends FormRequest
         if ($this->hasFile('avatar_upload')) {
             $newFile = $this->file('avatar_upload');
 
-
-
             if ($newFile->isValid() && strpos($newFile->getMimeType(), 'image/') === 0) {
                 if ($newFile->getSize() <= 2 * 1024 * 1024) {  // 2MB
 
                     $oldPath = session('new_avatar');
 
                     if ($oldPath && \Illuminate\Support\Facades\Storage::exists($oldPath)) {
+                        // dd($oldPath);
                         Storage::delete($oldPath);
                     }
 

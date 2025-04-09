@@ -33,6 +33,7 @@ class EmployeeCreateRequest extends FormRequest
 
                     $tempPath = $file->store('temp_avatars');
 
+                    // đường dẫn ảnh tạm
                     session()->put('temp_avatar', $tempPath);
 
                     $this->merge([

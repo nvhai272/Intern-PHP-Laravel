@@ -92,4 +92,15 @@ class Employee extends Authenticatable
     {
         return Constant::$workTypes[$this->type_of_work] ?? 'Unknown';
     }
+
+    public function getSalaryAttribute()
+    {
+        return "{$this->attributes['salary']}  VND";
+    }
+
+    public function getBirthdayAttribute()
+    {
+        return \Carbon\Carbon::parse($this->attributes['birthday'])->format('d-m-Y');
+    }
+
 }

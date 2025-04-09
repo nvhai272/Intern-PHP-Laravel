@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Management;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
@@ -30,12 +32,30 @@ class AuthController extends Controller
             ])->withInput();
         }
 
-        Log::info(LOGIN_SUCCEED . " with email: ", [$request->email]);
-        session(['accountLogin' => Auth::user()]);
-        return redirect()->route('home')->with('msg', LOGIN_SUCCEED);
-        //        return redirect('/')->with('success', 'Login successful');
+        if(Auth::check()){
+            $user = Auth::user();
 
+            // XÓA SESSION CỦ của user trừ cái hiện tại
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+
+        }
+
+        // ĐĂNG NHẬP lại để tạo session mới (bắt buộc vì session cũ bị xoá mất)
+        Auth::login($user);
+
+        // Ghi nhớ email nếu người dùng chọn
+        if ($request->has('remember_username')) {
+            cookie()->queue('remembered_email', $request->email, 60 * 24 * 30); // 30 ngày
+        } else {
+            cookie()->queue(cookie()->forget('remembered_email'));
+        }
+
+        Log::info(LOGIN_SUCCEED . " with email: ", [$request->email]);
+        session(['accountLogin' => $user]);
+
+        return redirect()->route('home')->with('msg', LOGIN_SUCCEED);
     }
+
 
     public function logout(Request $request)
     {
