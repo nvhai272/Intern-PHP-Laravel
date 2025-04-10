@@ -42,14 +42,13 @@ class Team extends Model
     protected static function boot()
     {
         parent::boot();
-        // dùng hàm này để gán giá trị thời gian tốt hơn là gán trực tiếp trên thuộc tính không ?
         static::creating(static function ($model) {
             $model->ins_id = auth()->check() ? auth()->user()->id : 1;
             $model->del_flag = IS_NOT_DELETED;
         });
 
         static::updating(static function ($model) {
-            $model->upd_id = auth()-> check() ? auth()->user()->id : 1;
+            $model->upd_id = auth()->check() ? auth()->user()->id : 1;
         });
     }
 
@@ -66,7 +65,6 @@ class Team extends Model
         return $this->save();
     }
 
-    // Accessor and Mutator
     protected function insDatetime(): Attribute
     {
         return Attribute::make(

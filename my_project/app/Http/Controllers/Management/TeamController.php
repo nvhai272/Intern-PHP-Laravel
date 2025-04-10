@@ -26,7 +26,7 @@ class TeamController extends Controller
 
     public function index()
     {
-        sleep(6);
+        // sleep(6);
         $sortBy = request()->get('sort_by', 'id');
         $order = request()->get('order', 'desc');
 

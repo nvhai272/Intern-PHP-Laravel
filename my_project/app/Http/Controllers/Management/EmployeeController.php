@@ -166,6 +166,8 @@ class EmployeeController extends Controller
         $id = $request->input('id');
         $validated = $request->validated();
         unset($validated['avatar_upload']);
+        // thêm field avatar -> lưu session để khi quay lại còn ảnh cũ
+        // dùng validated có ảnh mới hoặc ảnh cũ rồi
         // dd($validated);
         session(['dataEditEmp' => $validated]);
         $model = new Employee($validated);

@@ -21,7 +21,6 @@ class CheckEmployeePreviousUrl
             $isFromConfirm = str_contains($previousUrl, '/employee/add-confirm');
 
             $isFromValidationFail = $request->old(); // nếu fail form thì có dữ liệu old()
-
             if (!$isFromConfirm && !$isFromValidationFail) {
                 // Không phải từ add-confirm, không phải từ validation fail => Xóa session
                 session()->forget('dataCreateEmp');
@@ -33,7 +32,6 @@ class CheckEmployeePreviousUrl
                 }
             }
         }
-
 
         if (str_contains($currentUrl, '/management/employee/edit')) {
 

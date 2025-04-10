@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Management;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -13,9 +14,7 @@ use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function showLoginForm()
     {
@@ -32,18 +31,15 @@ class AuthController extends Controller
             ])->withInput();
         }
 
-        if(Auth::check()){
-            $user = Auth::user();
+        $user = Auth::user();
 
-            // XÓA SESSION CỦ của user trừ cái hiện tại
-            DB::table('sessions')->where('user_id', $user->id)->delete();
+        // Giữ lại session hiện tại, xoá các session khác
+        $currentSessionId = session()->getId();
+        DB::table('sessions')
+            ->where('user_id', $user->id)
+            ->where('id', '!=', $currentSessionId)
+            ->delete();
 
-        }
-
-        // ĐĂNG NHẬP lại để tạo session mới (bắt buộc vì session cũ bị xoá mất)
-        Auth::login($user);
-
-        // Ghi nhớ email nếu người dùng chọn
         if ($request->has('remember_username')) {
             cookie()->queue('remembered_email', $request->email, 60 * 24 * 30); // 30 ngày
         } else {

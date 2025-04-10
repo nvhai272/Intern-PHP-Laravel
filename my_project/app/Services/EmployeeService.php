@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Employee;
 use App\Models\Team;
 use App\Repositories\EmployeeRepository;
+use App\Repositories\Interfaces\IEmployeeRepository;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class EmployeeService
     protected EmployeeRepository $empRepo;
     private string $table;
 
-    public function __construct(EmployeeRepository $employeeRepository)
+    public function __construct(IEmployeeRepository $employeeRepository)
     {
         $this->empRepo = $employeeRepository;
         $this->table   = $this->empRepo->getTableName();

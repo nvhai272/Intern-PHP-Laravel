@@ -35,7 +35,7 @@ class EmployeeUpdateRequest extends FormRequest
                     }
 
                     $new_tempPath = $newFile->store('temp_avatars');
-
+                    // dùng session validate data là đủ
                     session()->put('new_avatar', $new_tempPath);
 
                     $this->merge([
@@ -45,6 +45,7 @@ class EmployeeUpdateRequest extends FormRequest
             }
         }
 
+        // dùng session validated data
         $new_avatar = session('new_avatar');
         if ($new_avatar) {
             $this->merge([
@@ -52,6 +53,8 @@ class EmployeeUpdateRequest extends FormRequest
             ]);
 
             // dd($this->request->all());
+
+            // chỗ này lưu session làm gì nhỉ có field current_ava rồi mà
             session()->put('current_avatar', $this->input('current_avatar'));
             // dd(session('current_avatar'));
         } else {
@@ -60,17 +63,16 @@ class EmployeeUpdateRequest extends FormRequest
             ]);
         }
 
-        if(empty($this->input('password'))){
+
+        if (empty($this->input('password'))) {
             $this->merge([
                 'password' => $this->input('current_password'),
             ]);
-        }
-        else{
+        } else {
             $this->merge([
                 'password' => Hash::make($this->input('password')),
             ]);
-            }
-
+        }
     }
 
     /**
