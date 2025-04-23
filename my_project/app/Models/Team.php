@@ -27,13 +27,15 @@ class Team extends Model
         return $this->hasMany(Employee::class);
     }
 
-    // chuyển đổi dữ liệu thành kiểu Carbon -> cần phải format lại hoặc sử dụng accesstor
-    //    protected $casts = [
-    //        'ins_datetime' => 'datetime:d-m-Y H:i:s', // Tùy chỉnh định dạng nhưng hiện tại chưa thấy gì? chỗ này hơn cấn cấn
-    //        'upd_datetime' => 'datetime:d-m-Y H:i:s',
-    //    ];
+    // team -project
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'team_project', 'team_id', 'project_id')
+            ->withPivot(['id', 'del_flag', 'ins_datetime', 'upd_datetime', 'team_id', 'project_id'])
+            ->withTimestamps();
+    }
 
-    // sử dụng global scope -> tự động áp dụng cho tất cả truy vấn
+
     protected static function booted(): void
     {
         static::addGlobalScope(new IsNotDeletedScope());
@@ -52,7 +54,6 @@ class Team extends Model
         });
     }
 
-    // sử dụng local scope -> chỉ dùng khi cần gọi
     public function scopeGetAllNoDeleted($query)
     {
         return $query->where('del_flag', 0);

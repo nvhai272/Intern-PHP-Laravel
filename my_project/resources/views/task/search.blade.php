@@ -15,22 +15,20 @@
     </div>
 @endif
 
-        {{-- {{            dd($data)
-            }} --}}
         <div class="card">
-            <div class="card-header"><b>Search - Employee</b></div>
+            <div class="card-header"><b>Search - Task</b></div>
             <div class="card-body">
 
-                <form method="GET" action="{{ route('emp.search') }}">
+                <form method="GET" action="{{ route('task.search') }}">
                     <div class="row">
                         <div class="col-md-4">
-                            <b for="team">Team</b>
+                            <b for="team">Project</b>
                             <select name="team_id" id="team" class="form-control">
-                                <option value="">All Teams</option>
-                                @foreach ($teams as $team)
-                                    <option value="{{ $team->id }}"
-                                        {{ request('team_id') == $team->id ? 'selected' : '' }}>
-                                        {{ $team->name }}
+                                <option value="">All Projects</option>
+                                @foreach ($projects as $pro)
+                                    <option value="{{ $pro->id }}"
+                                        {{ request('team_id') == $pro->id ? 'selected' : '' }}>
+                                        {{ $pro->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -41,11 +39,7 @@
                             <input type="text" name="full_name" id="name" class="form-control"
                             value="{{ request('full_name') }}">
                         </div>
-                        <div class="col-md-4">
-                            <b for="email">Email</b>
-                            <input type="text" name="email" id="email" class="form-control"
-                                value="{{ request('email') }}">
-                        </div>
+
                     </div>
 
                     <div class="mt-3">
@@ -54,13 +48,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-
-        <div class="mt-3 text-end">
-            <a href="{{ route('emp.export-csv',request()->all()) }}" class="btn btn-primary ">
-                Export CSV
-            </a>
-
         </div>
 
         <div class="table-responsive mt-3">
@@ -75,18 +62,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if ($emps->isNotEmpty())
-                        @foreach ($emps as $employee)
+                    @if ($tasks->isNotEmpty())
+                        @foreach ($tasks as $employee)
                             <tr class="{{ $loop->odd ? 'table-warning' : '' }}">
                                 <td>{{ $employee->id }}</td>
-                                <td>{{ $employee->team->name }}</td>
-                                <td>{{ $employee->full_name }}</td>
+                                {{-- <td>{{ $employee->team->name }}</td> --}}
+                                {{-- <td>{{ $employee->full_name }}</td> --}}
                                 <td>{{ $employee->email }}</td>
                                 <td>
-                                    <a href="{{ route('team.detail', $team->id) }}"
+                                    {{-- <a href="{{ route('team.detail', $team->id) }}"
                                         class="btn btn-primary btn-sm">Details</a>
                                     <a href="{{ route('emp.edit', $employee->id) }}"
-                                        class="btn btn-sm btn-warning">Edit</a>
+                                        class="btn btn-sm btn-warning">Edit</a> --}}
                                     <form action="{{ route('emp.delete', $employee->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf

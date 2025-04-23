@@ -32,6 +32,11 @@ return Application::configure(basePath: dirname(__DIR__))
             AuthMiddleware::class,
             // TimeoutMiddleware::class
         ]);
+
+        $middleware->group('management.middleware', [
+            AuthMiddleware::class,
+            // TimeoutMiddleware::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

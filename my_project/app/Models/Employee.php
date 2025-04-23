@@ -24,16 +24,35 @@ class Employee extends Authenticatable
         'ins_datetime',
     ];
 
-    protected $casts = [
-        'birthday'     => 'date',
-        'ins_datetime' => 'datetime:d-m-Y H:i:s',
-        'upd_datetime' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'birthday'     => 'date',
+    //     'ins_datetime' => 'datetime:d-m-Y H:i:s',
+    //     'upd_datetime' => 'datetime',
+    // ];
 
     public function team()
     {
         return $this->belongsTo(Team::class, 'team_id', 'id');
     }
+
+    // emp - pro
+       public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'employee_project', 'employee_id', 'project_id')
+        ->using(EmployeeProject::class)
+            ->withPivot(['id', 'del_flag', 'ins_datetime', 'upd_datetime','employee_id','project_id'])
+            ->withTimestamps();
+    }
+
+    // emp - task
+      public function tasks()
+    {
+        return $this->belongsToMany(Project::class, 'employee_task', 'employee_id', 'task_id')
+        ->using(EmployeeTask::class)
+            ->withPivot(['id', 'del_flag', 'ins_datetime', 'upd_datetime','task_id','employee_id'])
+            ->withTimestamps();
+    }
+
 
     protected static function booted(): void
     {
@@ -50,7 +69,7 @@ class Employee extends Authenticatable
         });
 
         static::updating(static function ($model) {
-            $model->upd_id = auth()-> check() ? auth()->user()->id : 1;
+            $model->upd_id = auth()->check() ? auth()->user()->id : 1;
         });
     }
 
@@ -102,5 +121,4 @@ class Employee extends Authenticatable
     {
         return \Carbon\Carbon::parse($this->attributes['birthday'])->format('d-m-Y');
     }
-
 }

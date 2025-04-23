@@ -22,13 +22,11 @@
 
         <table class="table table-bordered text-center">
             <thead>
-            <tr>
-                <th>{!! sort_link('id', $sortBy, $order, 'team.list') !!}</th>
-                <th>{!! sort_link('name', $sortBy, $order, 'team.list') !!}</th>
-                {{-- <th>Ins_Id</th>
-                <th>Upd_Id</th> --}}
-                <th>{!! sort_link('ins_datetime', $sortBy, $order, 'team.list') !!}</th>
-                <th>{!! sort_link('upd_datetime', $sortBy, $order, 'team.list') !!}</th>
+            <tr class="table-primary">
+                <th><x-sort-link column="id" label="ID" /></th>
+                <th><x-sort-link column="name" label="Team Name" /></th>
+                <th><x-sort-link column="ins_datetime" label="Inserted" /></th>
+                <th><x-sort-link column="upd_datetime" label="Updated" /></th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -51,7 +49,7 @@
                         <!-- Nút Xóa -->
                         <form action="{{ route('team.delete', $team->id) }}" method="POST" class="d-inline">
                             @csrf
-                            {{-- @method('DELETE') --}}
+
                             <button type="submit" class="btn btn-danger btn-sm"
                                     onclick="return confirm('Are you sure?')">Delete
                             </button>

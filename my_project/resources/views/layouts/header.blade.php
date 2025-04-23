@@ -47,6 +47,46 @@
                     </ul>
                 </li>
 
+                {{-- Project --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn text-white border border-primary
+                       {{ request()->routeIs('project.*') ? 'active' : '' }}"
+                       id="teamDropdown" data-bs-toggle="dropdown" role="button">
+                        Project Management
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item {{ request()->routeIs('project.list') ? 'active' : '' }}" href="{{ route('project.list') }}">
+                                <i class="bi bi-list"></i> List Project
+                            </a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('project.create') ? 'active' : '' }}" href="{{ route('project.create') }}">
+                                <i class="bi bi-plus-circle text-success"></i> Create Project
+                            </a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('project.search') ? 'active' : '' }}" href="{{ route('project.search') }}">
+                                <i class="bi bi-search"></i> Search Project
+                            </a></li>
+                    </ul>
+                </li>
+
+                {{-- Task --}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle btn text-white border border-primary
+                       {{ request()->routeIs('task.*') ? 'active' : '' }}"
+                       id="teamDropdown" data-bs-toggle="dropdown" role="button">
+                        Task Management
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item {{ request()->routeIs('task.list') ? 'active' : '' }}" href="{{ route('task.list') }}">
+                                <i class="bi bi-list"></i> List Task
+                            </a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('task.create') ? 'active' : '' }}" href="{{ route('task.create') }}">
+                                <i class="bi bi-plus-circle text-success"></i> Create Task
+                            </a></li>
+                        <li><a class="dropdown-item {{ request()->routeIs('task.search') ? 'active' : '' }}" href="{{ route('task.search') }}">
+                                <i class="bi bi-search"></i> Search Task
+                            </a></li>
+                    </ul>
+                </li>
+
                 <!-- Login / Logout -->
                 <li class="nav-item ms-3">
                     @if(Auth::check())

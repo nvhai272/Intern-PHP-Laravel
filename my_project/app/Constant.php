@@ -55,9 +55,20 @@ define('WORK_INTERN', '4');
 define('STATUS_WORKING', '1');
 define('STATUS_RETIRED', '2');
 
+define('FINISH_TASK', '3');
+define('DOING_TASK', '2');
+define('NOT_DOING_TASK', '1');
+
+
 class Constant
 {
     // array to show value follow key
+    public static $tasks = [
+        NOT_DOING_TASK => 'Not doing task',
+        DOING_TASK => 'Doing task',
+        FINISH_TASK => 'Done task'
+    ];
+
     public static $genders = [
         GENDER_MALE => 'Man',
         GENDER_FEMALE => 'Woman',
