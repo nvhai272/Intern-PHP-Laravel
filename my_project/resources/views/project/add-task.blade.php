@@ -83,12 +83,12 @@
             </div>
         </form>
 
-        {{-- Confirm Modal --}}
-        @include('layouts.confirm_modal', [
-            'title' => 'Confirm Add Task',
-            'form' => 'addTaskForm',
-            'slot' => 'Bạn có chắc muốn thêm Task Project không?',
-        ])
+            {{-- Confirm Modal --}}
+            @include('layouts.confirm_modal', [
+                'title' => 'Confirm Add Task',
+                'form' => 'addTaskForm',
+                'slot' => 'Bạn có chắc muốn thêm Task Project không?',
+            ])
 
         {{-- JS Script --}}
         <script>
